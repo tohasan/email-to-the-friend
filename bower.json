@@ -1,0 +1,26 @@
+{
+  "name": "email-to-the-friend",
+  "description": "Example of html/css for e-mail",
+  "main": "index.js",
+  "authors": [
+    "tohasan"
+  ],
+  "license": "ISC",
+  "keywords": [
+    "email",
+    "css",
+    "html"
+  ],
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "less": "2.5.3"
+  }
+}
