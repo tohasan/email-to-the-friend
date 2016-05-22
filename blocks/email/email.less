@@ -2,13 +2,21 @@
 @import "../common/less/base";
 
 .email {
-    font-family: @base-font;
-    font-size: 22px;
-    line-height: 1.4;
+    background: @bg;
 
     &__body {
-        margin: 0;
-        padding: 64px 8px;
+        width: 100%;
+        font-family: @base-font;
+        font-size: 22px;
+        line-height: 1.4;
+        text-align: center;
+        table-layout: fixed;
+        -webkit-text-size-adjust: 100%;
+        -ms-text-size-adjust: 100%;
         background: @bg;
+    }
+
+    &__wrapper {
+        padding: 64px 8px;
     }
 }

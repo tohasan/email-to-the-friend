@@ -48,10 +48,6 @@ module.exports = function (grunt) { // NOSONAR
                     cwd: pageDir,
                     src: '*.html',
                     dest: pageTmpDir
-                },{
-                    expand: true,
-                    src: 'blocks/common/images/*',
-                    dest: tmpDir
                 }]
             }
         },
@@ -80,7 +76,7 @@ module.exports = function (grunt) { // NOSONAR
             options: {
                 blockReplacements: {
                     less: function (block) {
-                        return '<link rel="stylesheet" href="' + block.dest + '?__inline=true">';
+                        return '<link rel="stylesheet" href="' + block.dest + '">';
                     }
                 }
             }
@@ -90,21 +86,18 @@ module.exports = function (grunt) { // NOSONAR
         },
         inlinecss: {
             options: {
-                xmlMode: true,
+                xmlMode: false,
                 applyWidthAttributes: true,
                 applyHeightAttributes: true,
                 applyAttributesTableElements: true,
                 preserveImportant: true,
-                preserveMediaQueries: false,
+                preserveMediaQueries: true,
+                preserveFontFaces: true,
                 insertPreservedExtraCss: false,
                 webResources: {
-                    scripts: false,
                     images: false
                 }
             },
-            files: pageTmpPath
-        },
-        inline: {
             index: {
                 src: pageTmpPath,
                 dest: pageTargetPath
@@ -140,7 +133,6 @@ module.exports = function (grunt) { // NOSONAR
     grunt.loadNpmTasks('grunt-contrib-concat');     // https://github.com/gruntjs/grunt-contrib-concat
     grunt.loadNpmTasks('grunt-contrib-copy');       // https://github.com/gruntjs/grunt-contrib-copy
     grunt.loadNpmTasks('grunt-contrib-less');       // https://github.com/gruntjs/grunt-contrib-less
-    grunt.loadNpmTasks('grunt-inline');             // https://github.com/chyingp/grunt-inline
     grunt.loadNpmTasks('grunt-inline-css');         // https://github.com/jgallen23/grunt-inline-css
     grunt.loadNpmTasks('grunt-postcss');            // https://github.com/nDmitry/grunt-postcss
     grunt.loadNpmTasks('grunt-usemin');             // https://github.com/yeoman/grunt-usemin
@@ -153,6 +145,6 @@ module.exports = function (grunt) { // NOSONAR
         'concat:generated',
         'usemin:index',
         'postcss:index',
-        'inline:index'
+        'inlinecss:index'
     ]);
 };
