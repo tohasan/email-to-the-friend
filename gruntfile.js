@@ -1,10 +1,34 @@
 
-module.exports = function (grunt) {
+module.exports = function (grunt) { // NOSONAR
+    var path = require('path');
+
     var targetDir = 'target';
+    var pageDir = 'emails';
     var tmpDir = targetDir + '/.tmp';
     var pageTmpDir = tmpDir + '/emails';
-    var pageTmp = pageTmpDir + '/index.html';
-    var pageTarget = targetDir + '/index.html';
+    var pageTmpPath = pageTmpDir + '/index.html';
+    var pageTargetPath = targetDir + '/index.html';
+
+    // Helper
+    var helper = {
+        createConfig: function (context, block) {
+            var cfg = { files: [] };
+            var outfile = path.join(context.outDir, block.dest);
+            var filesDef = {};
+
+            filesDef.dest = outfile;
+            filesDef.src = [];
+
+            context.inFiles.forEach(function (inFile) {
+                filesDef.src.push(path.join(context.inDir, inFile));
+            });
+
+            cfg.files.push(filesDef);
+
+            context.outFiles = [block.dest];
+            return cfg;
+        }
+    };
 
     // Measures the time each task takes
     require('time-grunt')(grunt);
@@ -12,49 +36,30 @@ module.exports = function (grunt) {
     // Tasks
     grunt.initConfig({
         less: {
-            generated: {
-                options: {
-                    plugins: [
-                        new (require('less-plugin-autoprefix'))({   // https://github.com/less/less-plugin-autoprefix
-                            browsers: ["last 2 versions", "> 1%"]   // ie >= 8; https://github.com/ai/browserslist
-                        }),
-                        new (require('less-plugin-clean-css'))({ // pass cleanCssOptions as parameter: https://github.com/jakubpawlowicz/clean-css
-                            advanced: false,            // set to false to disable advanced optimizations - selector & property merging, reduction, etc.
-                            aggressiveMerging: false,   // set to false to disable aggressive merging of properties.
-                            keepBreaks: false,          // whether to keep line breaks (default is false)
-                            mediaMerging: false,        // whether to merge @media blocks (default is true)
-                            shorthandCompacting: false, // set to false to skip shorthand compacting (default is true unless sourceMap is set when it's false)
-                            roundingPrecision: 0,       // rounding precision; defaults to 2; -1 disables rounding
-                            restructuring: false        // set to false to disable restructuring in advanced optimizations
-                        })
-                    ]
-                }
-            }
-        },
-        uglify: {
-            generated: {
-                options: {
-                    sourceMap: false,
-                    sourceMapIncludeSources: false
-                }
-            }
+            generated: {}
         },
         concat: {
             generated: {}
         },
         copy: {
-            target: {
+            tmp: {
                 files: [{
-                    src: pageTmp,
-                    dest: pageTarget
+                    expand: true,
+                    cwd: pageDir,
+                    src: '*.html',
+                    dest: pageTmpDir
+                },{
+                    expand: true,
+                    src: 'blocks/common/images/*',
+                    dest: tmpDir
                 }]
             }
         },
         useminPrepare: {
-            src: pageTmp,
+            index: pageTmpPath,
             options: {
                 dest: pageTmpDir,
-                root: 'emails',
+                root: pageDir,
                 staging: tmpDir,
                 flow: {
                     steps: {
@@ -71,14 +76,14 @@ module.exports = function (grunt) {
             }
         },
         usemin: {
+            index: pageTmpPath,
             options: {
                 blockReplacements: {
                     less: function (block) {
-                        return '<link rel="stylesheet" href="' + block.dest + '">';
+                        return '<link rel="stylesheet" href="' + block.dest + '?__inline=true">';
                     }
                 }
-            },
-            index: pageTmp
+            }
         },
         clean: {
             target: targetDir
@@ -97,7 +102,36 @@ module.exports = function (grunt) {
                     images: false
                 }
             },
-            files: pageTmp
+            files: pageTmpPath
+        },
+        inline: {
+            index: {
+                src: pageTmpPath,
+                dest: pageTargetPath
+            }
+        },
+        postcss: {
+            options: {
+                processors: [
+                    // https://github.com/postcss/autoprefixer
+                    require('autoprefixer')({
+                        // ie >= 8; https://github.com/ai/browserslist
+                        browsers: ["last 2 versions", "> 1%"]
+                    }),
+                    // http://cssnano.co
+                    require('cssnano')({
+                        // Disable unsafe optimizations
+                        reduceIdents: false,
+                        zindex: false,
+                        mergeIdents: false,
+                        discardUnused: false
+                    })
+                ]
+            },
+            index: {
+                src: pageTmpDir + '/css/master.css',
+                dest: pageTmpDir + '/css/master.css'
+            }
         }
     });
 
@@ -106,13 +140,19 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');     // https://github.com/gruntjs/grunt-contrib-concat
     grunt.loadNpmTasks('grunt-contrib-copy');       // https://github.com/gruntjs/grunt-contrib-copy
     grunt.loadNpmTasks('grunt-contrib-less');       // https://github.com/gruntjs/grunt-contrib-less
-    grunt.loadNpmTasks('grunt-contrib-uglify');     // https://github.com/gruntjs/grunt-contrib-uglify
-    grunt.loadNpmTasks('grunt-text-replace');       // https://github.com/yoniholmes/grunt-text-replace
-    grunt.loadNpmTasks('grunt-usemin');             // https://github.com/yeoman/grunt-usemin
+    grunt.loadNpmTasks('grunt-inline');             // https://github.com/chyingp/grunt-inline
     grunt.loadNpmTasks('grunt-inline-css');         // https://github.com/jgallen23/grunt-inline-css
+    grunt.loadNpmTasks('grunt-postcss');            // https://github.com/nDmitry/grunt-postcss
+    grunt.loadNpmTasks('grunt-usemin');             // https://github.com/yeoman/grunt-usemin
 
-    grunt.registerTask('templates:build', [
+    grunt.registerTask('emails:build', [
         'clean:target',
-        'useminPrepare:index'
+        'copy:tmp',
+        'useminPrepare:index',
+        'less:generated',
+        'concat:generated',
+        'usemin:index',
+        'postcss:index',
+        'inline:index'
     ]);
 };
