@@ -7,10 +7,12 @@ module.exports = function (grunt) { // NOSONAR
     var tmpDir = targetDir + '/.tmp';
     var pageTmpDir = tmpDir + '/emails';
     var pageTmpPath = pageTmpDir
-        + '/8march-1.html';
+        + '/8march-2.html';
+        // + '/8march-1.html';
         // + '/index.html';
     var pageTargetPath = targetDir
-        + '/8march-1.html';
+        + '/8march-2.html';
+        // + '/8march-1.html';
         // + '/index.html';
 
     // Helper
