@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <!-- Specified DOCTYPE yields the fewest quirks -->
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <!-- IE=edge is used here so that Windows Phones will display our mobile version correctly.
+    It is hidden inside a conditional comment that hides it from any 'mso' (Microsoft Outlook) products
+    to prevent a problem where Windows Live Mail will not display images when this tag is used -->
+    <!--[if !mso]><!-->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!--<![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <!-- A title tag is required for valid XHTML, but some native Android mail clients will display
+    this title just before the preheader in the inbox preview, which usually isn’t ideal -->
+    <title></title>
+
+    <!--suppress HtmlUnknownAttribute -->
+    <link href="https://fonts.googleapis.com/css?family=Comfortaa" rel="stylesheet" type='text/css' data-inline-ignore>
+
+    <!-- build:less css/master.css -->
+    <link href="../blocks/common/less/resets.less" type="text/css" rel="stylesheet/less" />
+
+    <link href="../blocks/container/container.less" type="text/css" rel="stylesheet/less" />
+    <link href="../blocks/content/content.less" type="text/css" rel="stylesheet/less" />
+    <link href="../blocks/email/email.less" type="text/css" rel="stylesheet/less" />
+    <link href="../blocks/header/header.less" type="text/css" rel="stylesheet/less" />
+    <!-- endbuild -->
+
+    <!-- build:exclude -->
+    <!-- Tech (development only) -->
+    <!-- less.js to compile .less-files -->
+    <script type="text/javascript" src="../components/less/dist/less.min.js"></script>
+    <!-- endbuild -->
+</head>
+<body class="email email_mode_8march-1">
+    <table class="email__body">
+        <tr>
+            <td class="email__wrapper">
+                <table class="container">
+                    <tr>
+                        <td class="header">
+                            <img class="header__img" alt="so sweet" src="../blocks/common/images/8march1.jpg"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="content">
+                            <table class="content__wrapper">
+                                <tr>
+                                    <td class="content__title">Дорогая {{name}}!</td>
+                                </tr>
+                                <tr>
+                                    <td class="content__paragraph content__paragraph_type_greetings">
+                                        Весна приносит обновленье<br/>
+                                        Улыбки, счастье и цветы<br/>
+                                        И я хочу, чтоб в день весны рожденье<br/>
+                                        Твои исполнились мечты!<br/>
+                                        <br/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="content__paragraph content__paragraph_type_final">
+                                        Искренне твои,<br/>
+                                        команда IT Yota
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

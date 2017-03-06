@@ -6,8 +6,12 @@ module.exports = function (grunt) { // NOSONAR
     var pageDir = 'emails';
     var tmpDir = targetDir + '/.tmp';
     var pageTmpDir = tmpDir + '/emails';
-    var pageTmpPath = pageTmpDir + '/index.html';
-    var pageTargetPath = targetDir + '/index.html';
+    var pageTmpPath = pageTmpDir
+        + '/8march-1.html';
+        // + '/index.html';
+    var pageTargetPath = targetDir
+        + '/8march-1.html';
+        // + '/index.html';
 
     // Helper
     var helper = {
